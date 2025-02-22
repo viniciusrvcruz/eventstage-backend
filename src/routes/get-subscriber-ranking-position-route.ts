@@ -10,8 +10,9 @@ export const getSubscriberRankingPositionRoute: FastifyPluginAsyncZod = async ap
       schema: {
         summary: 'Get subscriber ranking position',
         tags: ['referral'],
+        operationId: 'getSubscriberRankingPosition',
         params: z.object({
-          subscriberId: z.string(),
+          subscriberId: z.string().uuid(),
         }),
         response: {
           200: z.object({

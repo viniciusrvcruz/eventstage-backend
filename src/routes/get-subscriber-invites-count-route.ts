@@ -8,9 +8,10 @@ export const getSubscriberInvitesCountRoute: FastifyPluginAsyncZod = async app =
     {
       schema: {
         summary: 'Get subscriber invites count',
+        operationId: 'getSubscriberInvitesCount',
         tags: ['referral'],
         params: z.object({
-          subscriberId: z.string(),
+          subscriberId: z.string().uuid(),
         }),
         response: {
           200: z.object({
