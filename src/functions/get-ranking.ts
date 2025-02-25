@@ -1,6 +1,6 @@
 import { inArray } from "drizzle-orm";
 import { db } from "../drizzle/client";
-import { subscriptions } from "../drizzle/schema/subscriptions";
+import { subscriptions } from "../drizzle/schema/subscriptions.schema";
 import { redis } from "../redis/client";
 
 export async function getRanking() {

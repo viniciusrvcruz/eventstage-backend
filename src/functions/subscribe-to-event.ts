@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm"
 import { db } from "../drizzle/client"
-import { subscriptions } from "../drizzle/schema/subscriptions"
+import { subscriptions } from "../drizzle/schema/subscriptions.schema"
 import { redis } from "../redis/client"
 
 interface SubscribeToEventParams {
@@ -23,9 +23,13 @@ export async function subscribeToEvent({
     return {subscriberId: subscribers[0].id}
   }
 
+  // const result = await db.insert(subscriptions).values({
+  //   name,
+  //   email,
+  // }).returning()
   const result = await db.insert(subscriptions).values({
-    name,
     email,
+    eventId: '2'
   }).returning()
 
   if(referrerId) {

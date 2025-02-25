@@ -15,6 +15,8 @@ import { getSubscriberInviteClicksRoute } from './routes/get-subscriber-invite-c
 import { getSubscriberInvitesCountRoute } from './routes/get-subscriber-invites-count-route'
 import { getSubscriberRankingPositionRoute } from './routes/get-subscriber-ranking-position-route'
 import { getRankingRoute } from './routes/get-ranking-route'
+import { publicRoutes } from './routes/public.routes'
+import { CustomError } from './exceptions/CustomError.exception'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -37,12 +39,22 @@ app.register(fastifySwaggerUi, {
   routePrefix: '/docs',
 })
 
+app.setErrorHandler((error, request, reply) => {
+  if (error instanceof CustomError) {
+    reply.status(error.statusCode).send({ error: error.message });
+  } else {
+    reply.send(error);
+  }
+})
+
 app.register(subscribeToEventRoute)
 app.register(accessInviteLinkRoute)
 app.register(getSubscriberInviteClicksRoute)
 app.register(getSubscriberInvitesCountRoute)
 app.register(getSubscriberRankingPositionRoute)
 app.register(getRankingRoute)
+
+app.register(publicRoutes, {prefix: '/api'})
 
 app.listen({ port: env.PORT }).then(() => {
   console.log('HTTP server running!')
