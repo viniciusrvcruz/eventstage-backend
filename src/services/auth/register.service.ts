@@ -1,9 +1,9 @@
-import { db } from "../drizzle/client";
-import { RegisterSchema } from "../schemas/auth.schema";
-import { users } from "../drizzle/schema/users.schema";
+import { db } from "../../drizzle/client";
+import { RegisterSchema } from "../../schemas/auth.schema";
+import { users } from "../../drizzle/schema/users.schema";
 import { eq } from "drizzle-orm";
-import { CustomError } from "../exceptions/CustomError.exception";
-import { hashPassword } from "../utils/hash.utils";
+import { hashPassword } from "../../utils/hash.utils";
+import { CustomError } from "@/exceptions/CustomError.exception";
 
 export async function register({name, email, password}: RegisterSchema): Promise<string> {
 

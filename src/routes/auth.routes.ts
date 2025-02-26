@@ -1,9 +1,10 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
-import { registerSchema } from '../schemas/auth.schema'
-import { registerHandler } from '../controllers/auth.controller'
+import { LoginSchema, loginSchema, registerSchema } from '@/schemas/auth.schema'
+import { loginHandler, registerHandler } from '@/controllers/auth.controller'
+import { FastifyRequest } from 'fastify'
 
-export const authRoutes: FastifyPluginAsyncZod = async app => {
+export const authPublicRoutes: FastifyPluginAsyncZod = async app => {
   app.post(
     '/register',
     {
@@ -22,21 +23,23 @@ export const authRoutes: FastifyPluginAsyncZod = async app => {
     registerHandler
   )
 
-  // app.post(
-  //   '/login',
-  //   {
-  //     schema: {
-  //       summary: 'Login',
-  //       operationId: 'login',
-  //       tags: ['auth'],
-  //       // body: registerSchema,
-  //       response: {
-  //         200: z.object({
-  //           token: z.string()
-  //         }),
-  //       },
-  //     },
-  //   },
-  //   login
-  // )
+  app.post(
+    '/login',
+    {
+      schema: {
+        summary: 'Login',
+        operationId: 'login',
+        tags: ['auth'],
+        body: loginSchema,
+        response: {
+          200: z.object({
+            token: z.string()
+          }),
+        },
+      },
+    },
+    (request: FastifyRequest<{
+        Body: LoginSchema;
+    }>, reply) => loginHandler(request, reply, app)
+  )
 }

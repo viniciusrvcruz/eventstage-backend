@@ -1,6 +1,6 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
-import { authRoutes } from './auth.routes'
+import { authPublicRoutes } from '@/routes/auth.routes'
 
 export const publicRoutes: FastifyPluginAsyncZod = async app => {
-  app.register(authRoutes)
+  app.register(authPublicRoutes)
 }
