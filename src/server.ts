@@ -43,7 +43,11 @@ app.register(fastifySwaggerUi, {
 
 app.setErrorHandler((error, request, reply) => {
   if (error instanceof CustomError) {
-    reply.status(error.statusCode).send({ error: error.message });
+    return reply.status(error.statusCode).send({ error: error.message });
+  }
+
+  if(env.NODE_ENV === 'production') {
+    reply.status(500).send({ error: 'Internal Error' });
   } else {
     reply.send(error);
   }
@@ -53,8 +57,8 @@ app.register(fastifyJwt, {
   secret: env.SECRET_KEY
 })
 
-app.register(subscribeToEventRoute)
-app.register(accessInviteLinkRoute)
+// app.register(subscribeToEventRoute)
+// app.register(accessInviteLinkRoute)
 app.register(getSubscriberInviteClicksRoute)
 app.register(getSubscriberInvitesCountRoute)
 app.register(getSubscriberRankingPositionRoute)

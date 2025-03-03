@@ -5,21 +5,21 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1740595787101,
+      "when": 1740966012852,
       "tag": "0000_create_users_table",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1740595863252,
+      "when": 1740966076510,
       "tag": "0001_create_events_table",
       "breakpoints": true
     },
     {
       "idx": 2,
       "version": "7",
-      "when": 1740595919507,
+      "when": 1740966196671,
       "tag": "0002_create_subscriptions_table",
       "breakpoints": true
     }
