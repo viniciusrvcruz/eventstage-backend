@@ -1,10 +1,10 @@
 import { z } from "zod";
 
-export const createSubscriptionToEventParamsSchema = z.object({
-  eventId: z.string()
+export const eventParamsSchema = z.object({
+  eventId: z.string().uuid()
 })
 
-export type CreateSubscriptionToEventParamsSchema = z.infer<typeof createSubscriptionToEventParamsSchema>;
+export type EventParamsSchema = z.infer<typeof eventParamsSchema>;
 
 export const createSubscriptionToEventBodySchema = z.object({
   name: z.string(),
