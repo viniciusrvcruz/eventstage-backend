@@ -8,12 +8,6 @@ import {
   serializerCompiler,
   validatorCompiler,
 } from 'fastify-type-provider-zod'
-import { subscribeToEventRoute } from './routes/subscribe-to-event-route'
-import { accessInviteLinkRoute } from './routes/access-invite-link-route'
-import { getSubscriberInviteClicksRoute } from './routes/get-subscriber-invite-clicks-route'
-import { getSubscriberInvitesCountRoute } from './routes/get-subscriber-invites-count-route'
-import { getSubscriberRankingPositionRoute } from './routes/get-subscriber-ranking-position-route'
-import { getRankingRoute } from './routes/get-ranking-route'
 import { publicRoutes } from './routes/public.routes'
 import { CustomError } from '@/exceptions/CustomError.exception'
 import fastifyJwt from '@fastify/jwt'
@@ -56,13 +50,6 @@ app.setErrorHandler((error, request, reply) => {
 app.register(fastifyJwt, {
   secret: env.SECRET_KEY
 })
-
-// app.register(subscribeToEventRoute)
-// app.register(accessInviteLinkRoute)
-// app.register(getSubscriberInviteClicksRoute)
-// app.register(getSubscriberInvitesCountRoute)
-// app.register(getSubscriberRankingPositionRoute)
-// app.register(getRankingRoute)
 
 app.register(publicRoutes, {prefix: '/api'})
 app.register(privateRoutes, {prefix: '/api'})
