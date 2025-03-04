@@ -59,10 +59,10 @@ app.register(fastifyJwt, {
 
 // app.register(subscribeToEventRoute)
 // app.register(accessInviteLinkRoute)
-app.register(getSubscriberInviteClicksRoute)
-app.register(getSubscriberInvitesCountRoute)
-app.register(getSubscriberRankingPositionRoute)
-app.register(getRankingRoute)
+// app.register(getSubscriberInviteClicksRoute)
+// app.register(getSubscriberInvitesCountRoute)
+// app.register(getSubscriberRankingPositionRoute)
+// app.register(getRankingRoute)
 
 app.register(publicRoutes, {prefix: '/api'})
 app.register(privateRoutes, {prefix: '/api'})
