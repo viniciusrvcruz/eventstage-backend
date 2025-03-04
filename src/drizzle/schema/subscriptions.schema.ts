@@ -5,6 +5,7 @@ export const subscriptions = pgTable(
     'subscriptions',
     {
         id: uuid('id').primaryKey().defaultRandom(),
+        name: varchar('name', { length: 256 }).notNull(),
         email: varchar('email', { length: 256 }).notNull(),
         eventId: uuid('event_id').references(() => events.id, {onDelete: 'cascade'}).notNull(),
         createdAt: timestamp('created_at').notNull().defaultNow()
