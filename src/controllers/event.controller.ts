@@ -1,4 +1,4 @@
-import { EventPayloadSchema } from "@/schemas/event.schema";
+import { EventPayloadSchema, EventsPaginationSchema } from "@/schemas/event.schema";
 import { createEvent } from "@/services/event/create-event.service";
 import { deleteEvent } from "@/services/event/delete-event.service";
 import { getEvent } from "@/services/event/get-event.service";
@@ -7,9 +7,13 @@ import { udpateEvent } from "@/services/event/update-event.service";
 import { FastifyRequest } from "fastify";
 
 export async function getEventsHandler(request: FastifyRequest) {
-  const events = await getEvents(request.user.id)
+  const { search, page, pageSize, myEvents, mySubscriptions } = request.query as EventsPaginationSchema
 
-  return { events }
+  const user = request.user
+
+  const response = await getEvents({ search, page, pageSize, user, myEvents, mySubscriptions })
+
+  return response
 }
 
 export async function createEventHandler(request: FastifyRequest<{Body: EventPayloadSchema}>) {
