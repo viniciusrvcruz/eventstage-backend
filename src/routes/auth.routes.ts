@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { LoginSchema, loginSchema, registerSchema } from '@/schemas/auth.schema'
 import { loginHandler, registerHandler } from '@/controllers/auth.controller'
 import { FastifyRequest } from 'fastify'
+import { userSchema } from '@/schemas/user.schema'
 
 export const authPublicRoutes: FastifyPluginAsyncZod = async app => {
   app.post(
@@ -41,5 +42,26 @@ export const authPublicRoutes: FastifyPluginAsyncZod = async app => {
     (request: FastifyRequest<{
         Body: LoginSchema;
     }>, reply) => loginHandler(request, reply, app)
+  )
+}
+
+export const authPrivateRoutes: FastifyPluginAsyncZod = async app => {
+  app.get(
+    '/get-auth-user',
+    {
+      schema: {
+        summary: 'Login',
+        operationId: 'login',
+        tags: ['auth'],
+        response: {
+          200: z.object({
+            user: userSchema
+          })
+        },
+      },
+    },
+    (request: FastifyRequest, reply) => {
+      return reply.code(200).send({ user: request.user});
+    }
   )
 }

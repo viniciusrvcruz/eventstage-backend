@@ -27,6 +27,20 @@ app.register(fastifySwagger, {
       title: 'NLW Connect',
       version: '0.0.1',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
   transform: jsonSchemaTransform,
 })
@@ -41,7 +55,7 @@ app.setErrorHandler((error, request, reply) => {
   }
 
   if(env.NODE_ENV === 'production') {
-    reply.status(500).send({ error: 'Internal Error' });
+    reply.status(500).send({ error: 'Internal Server Error' });
   } else {
     reply.send(error);
   }
