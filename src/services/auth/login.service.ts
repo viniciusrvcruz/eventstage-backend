@@ -26,6 +26,9 @@ export async function login({email, password}: LoginSchema, app: FastifyInstance
         id: user.id,
         name: user.name,
         email: user.email
+    },
+    {
+        expiresIn: '7d'
     })
     
     return { token }

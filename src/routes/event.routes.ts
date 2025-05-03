@@ -1,6 +1,6 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
-import { eventPayloadSchema, eventSchema } from '@/schemas/event.schema'
+import { eventPayloadSchema, eventSchema, eventsPaginationSchema } from '@/schemas/event.schema'
 import { createEventHandler, deleteEventHandler, getEventHandler, getEventsHandler, updateEventHandler } from '@/controllers/event.controller'
 
 export const eventPrivateRoutes: FastifyPluginAsyncZod = async app => {
@@ -11,9 +11,11 @@ export const eventPrivateRoutes: FastifyPluginAsyncZod = async app => {
         summary: 'Get events',
         operationId: 'getEvents',
         tags: ['events'],
+        querystring: eventsPaginationSchema,
         response: {
           200: z.object({
             events: z.array(eventSchema),
+            total: z.number(),
           })
         },
       },

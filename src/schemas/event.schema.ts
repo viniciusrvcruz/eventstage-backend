@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { paginationSchema } from "./pagination.schema";
+import { coerceStringToBoolean } from "@/utils/coerce-string-to-boolean.utils";
 
 export const eventSchema = z.object({
   id: z.string(),
@@ -6,7 +8,7 @@ export const eventSchema = z.object({
   subtitle: z.string().min(2),
   description: z.string().min(2),
   date: z.coerce.date(),
-  url: z.string().max(2048),
+  url: z.string().url().max(2048),
   is_live: z.boolean(),
   createdBy: z.string(),
   createdAt: z.coerce.date()
@@ -21,3 +23,13 @@ export const eventPayloadSchema = eventSchema.omit({
 });
 
 export type EventPayloadSchema = z.infer<typeof eventPayloadSchema>;
+
+export const eventsPaginationSchema = paginationSchema.merge(
+  z.object({
+    search: z.string().optional(),
+    myEvents: coerceStringToBoolean().optional(),
+    mySubscriptions: coerceStringToBoolean().optional(),
+  })
+);
+
+export type EventsPaginationSchema = z.infer<typeof eventsPaginationSchema>;
