@@ -1,7 +1,7 @@
 import { db } from "@/drizzle/client";
 import { events } from "@/drizzle/schema/events.schema";
 import { subscriptions } from "@/drizzle/schema/subscriptions.schema";
-import { EventSchema } from "@/schemas/event.schema";
+import { EventWithSubscription } from "@/schemas/event.schema";
 import { UserSchema } from "@/schemas/user.schema";
 import { withPagination } from "@/utils/with-pagination.utils";
 import { ilike, sql, desc, eq, and, exists } from "drizzle-orm";
@@ -16,7 +16,7 @@ interface GetEventsParams {
 }
 
 interface GetEventsResult {
-  events: EventSchema[];
+  events: EventWithSubscription[];
   total: number;
 }
 
@@ -57,8 +57,18 @@ export async function getEvents({
   const whereFilter = whereConditions.length > 0 ? and(...whereConditions) : undefined;
 
   const baseQuery = db
-    .select()
+    .select({
+      event: events,
+      subscription: subscriptions,
+    })
     .from(events)
+    .leftJoin(
+      subscriptions,
+      and(
+        eq(subscriptions.eventId, events.id),
+        eq(subscriptions.email, user.email)
+      )
+    )
     .where(whereFilter);
 
   const countQuery = db
@@ -68,12 +78,17 @@ export async function getEvents({
 
   const [{ count }] = await countQuery;
 
-  const paginatedEvents = await withPagination(
+  const paginatedEventsRaw = await withPagination(
     baseQuery.$dynamic(),
     [desc(events.createdAt), desc(events.id)],
     page,
     pageSize
   );
+
+  const paginatedEvents = paginatedEventsRaw.map(row => ({
+    ...row.event,
+    subscription: row.subscription
+  }))
 
   return {
     events: paginatedEvents,

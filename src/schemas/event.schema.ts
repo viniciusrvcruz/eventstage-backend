@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { paginationSchema } from "./pagination.schema";
 import { coerceStringToBoolean } from "@/utils/coerce-string-to-boolean.utils";
+import { subscriptionSchema } from "./event.subscription.schema";
 
 export const eventSchema = z.object({
   id: z.string(),
@@ -33,3 +34,11 @@ export const eventsPaginationSchema = paginationSchema.merge(
 );
 
 export type EventsPaginationSchema = z.infer<typeof eventsPaginationSchema>;
+
+export const eventWithSubscription = eventSchema.merge(
+  z.object({
+    subscription: subscriptionSchema.nullable()
+  })
+)
+
+export type EventWithSubscription = z.infer<typeof eventWithSubscription>;
