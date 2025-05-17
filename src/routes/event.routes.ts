@@ -1,7 +1,8 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { z } from 'zod'
-import { eventPayloadSchema, eventSchema, eventsPaginationSchema } from '@/schemas/event.schema'
-import { createEventHandler, deleteEventHandler, getEventHandler, getEventsHandler, updateEventHandler } from '@/controllers/event.controller'
+import { eventPayloadSchema, eventSchema, eventsPaginationSchema, eventWithSubscription } from '@/schemas/event.schema'
+import { createEventHandler, deleteEventHandler, getEventHandler, getEventsHandler, getEventSubscriptionHandler, updateEventHandler } from '@/controllers/event.controller'
+import { subscriptionSchema } from '@/schemas/event.subscription.schema'
 
 export const eventPrivateRoutes: FastifyPluginAsyncZod = async app => {
   app.get(
@@ -14,7 +15,7 @@ export const eventPrivateRoutes: FastifyPluginAsyncZod = async app => {
         querystring: eventsPaginationSchema,
         response: {
           200: z.object({
-            events: z.array(eventSchema),
+            events: z.array(eventWithSubscription),
             total: z.number(),
           })
         },
@@ -50,7 +51,7 @@ export const eventPrivateRoutes: FastifyPluginAsyncZod = async app => {
         tags: ['events'],
         body: eventPayloadSchema,
         params: z.object({
-          eventId: z.string()
+          eventId: z.string().uuid()
         }),
         response: {
           200: z.object({
@@ -62,6 +63,46 @@ export const eventPrivateRoutes: FastifyPluginAsyncZod = async app => {
     updateEventHandler
   )
 
+  app.delete(
+    '/:eventId',
+    {
+      schema: {
+        summary: 'Delete event',
+        operationId: 'deleteEvent',
+        tags: ['events'],
+        params: z.object({
+          eventId: z.string().uuid()
+        }),
+        response: {
+          200: z.null(),
+        },
+      },
+    },
+    deleteEventHandler
+  )
+
+  app.get(
+    '/:eventId/subscription',
+    {
+      schema: {
+        summary: 'Get event subscription',
+        operationId: 'getEventSubscription',
+        tags: ['events'],
+        params: z.object({
+          eventId: z.string().uuid()
+        }),
+        response: {
+          200: z.object({
+            subscription: subscriptionSchema.nullable()
+          }),
+        },
+      },
+    },
+    getEventSubscriptionHandler
+  )
+}
+
+export const eventPublicRoutes: FastifyPluginAsyncZod = async app => {
   app.get(
     '/:eventId',
     {
@@ -70,7 +111,7 @@ export const eventPrivateRoutes: FastifyPluginAsyncZod = async app => {
         operationId: 'getEvent',
         tags: ['events'],
         params: z.object({
-          eventId: z.string()
+          eventId: z.string().uuid()
         }),
         response: {
           200: z.object({
@@ -80,23 +121,5 @@ export const eventPrivateRoutes: FastifyPluginAsyncZod = async app => {
       },
     },
     getEventHandler
-  )
-
-  app.delete(
-    '/:eventId',
-    {
-      schema: {
-        summary: 'Delete event',
-        operationId: 'deleteEvent',
-        tags: ['events'],
-        params: z.object({
-          eventId: z.string()
-        }),
-        response: {
-          200: z.null(),
-        },
-      },
-    },
-    deleteEventHandler
   )
 }
