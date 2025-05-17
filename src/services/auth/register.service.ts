@@ -12,7 +12,7 @@ export async function register({name, email, password}: RegisterSchema): Promise
     })
 
     if(user !== undefined) {
-        throw new CustomError('User already exists with this email', 422)
+        throw new CustomError('user_already_exists_with_this_email', 422)
     }
 
     const hashedPassword = await hashPassword(password)
