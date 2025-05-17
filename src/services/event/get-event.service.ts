@@ -10,7 +10,7 @@ export async function getEvent(eventId: string): Promise<EventSchema> {
   })
 
   if (event === undefined) {
-    throw new CustomError('Event not found', 404)
+    throw new CustomError('event_not_found', 404)
   }
 
   return event

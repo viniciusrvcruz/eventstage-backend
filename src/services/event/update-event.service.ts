@@ -17,7 +17,7 @@ export async function udpateEvent(event: EventPayloadSchema, eventId: string, us
 		.returning();
 
 	if(updatedEvent.length === 0) {
-		throw new CustomError('Event not found', 404)
+		throw new CustomError('event_not_found', 404)
 	}
 
 	return updatedEvent[0]
