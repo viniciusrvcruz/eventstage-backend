@@ -14,7 +14,7 @@ export async function accessInviteLink({
   eventId,
   subscriptionId
 }: AccessInviteLinkParams) {
-  const redirectUrl = new URL(env.WEB_URL)
+  const redirectUrl = new URL(`${env.WEB_URL}/events/${eventId}/subscribe`);
 
   const subscription = await db.query.subscriptions.findFirst({
     where: eq(subscriptions.id, subscriptionId),
