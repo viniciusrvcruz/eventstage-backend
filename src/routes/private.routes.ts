@@ -9,7 +9,7 @@ export const privateRoutes: FastifyPluginAsyncZod = async app => {
     try {
       await request.jwtVerify()
     } catch (err) {
-      throw new CustomError('Unauthorized', 401)
+      throw new CustomError('unauthorized', 401)
     }
   })
 

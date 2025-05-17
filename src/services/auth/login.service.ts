@@ -13,13 +13,13 @@ export async function login({email, password}: LoginSchema, app: FastifyInstance
     })
 
     if(user === undefined) {
-        throw new CustomError('Invalid credentials', 401)
+        throw new CustomError('invalid_credentials', 401)
     }
 
     const isPasswordCorrect = await vefifyPassword(password, user.password)
 
     if(!isPasswordCorrect) {
-        throw new CustomError('Invalid credentials', 401)
+        throw new CustomError('invalid_credentials', 401)
     }
 
     const token = app.jwt.sign({
