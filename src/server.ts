@@ -68,6 +68,11 @@ app.register(fastifyJwt, {
 app.register(publicRoutes, {prefix: '/api'})
 app.register(privateRoutes, {prefix: '/api'})
 
-app.listen({ port: env.PORT }).then(() => {
-  console.log(`HTTP server running on port ${env.PORT}`)
-})
+const port = env.PORT || 3000;
+const host = env.NODE_ENV === 'production' ? '0.0.0.0' : '127.0.0.1';
+
+app.listen({ port: Number(port), host }).then(() => {
+  console.log(`HTTP server running on port ${port}`);
+}).catch((err) => {
+  console.error('Error starting server:', err);
+});
