@@ -69,5 +69,5 @@ app.register(publicRoutes, {prefix: '/api'})
 app.register(privateRoutes, {prefix: '/api'})
 
 app.listen({ port: env.PORT }).then(() => {
-  console.log('HTTP server running!')
+  console.log(`HTTP server running on port ${env.PORT}`)
 })
