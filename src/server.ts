@@ -54,6 +54,10 @@ app.setErrorHandler((error, request, reply) => {
     return reply.status(error.statusCode).send({ error: error.message });
   }
 
+  if(error.code === 'FST_ERR_VALIDATION') {
+    return reply.status(400).send({ error: 'validation_error', details: error.validation });
+  }
+
   if(env.NODE_ENV === 'production') {
     reply.status(500).send({ error: 'Internal Server Error' });
   } else {
@@ -68,6 +72,11 @@ app.register(fastifyJwt, {
 app.register(publicRoutes, {prefix: '/api'})
 app.register(privateRoutes, {prefix: '/api'})
 
-app.listen({ port: env.PORT }).then(() => {
-  console.log('HTTP server running!')
-})
+const port = env.PORT;
+const host = env.NODE_ENV === 'production' ? '0.0.0.0' : '127.0.0.1';
+
+app.listen({ port, host }).then(() => {
+  console.log(`HTTP server running on port ${port}`);
+}).catch((err) => {
+  console.error('Error starting server:', err);
+});
