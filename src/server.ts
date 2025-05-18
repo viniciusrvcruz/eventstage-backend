@@ -24,7 +24,7 @@ app.register(fastifyCors)
 app.register(fastifySwagger, {
   openapi: {
     info: {
-      title: 'NLW Connect',
+      title: 'Eventstage API',
       version: '0.0.1',
     },
     components: {
