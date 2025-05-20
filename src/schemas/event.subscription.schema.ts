@@ -17,7 +17,7 @@ export const eventParamsSchema = z.object({
 export type EventParamsSchema = z.infer<typeof eventParamsSchema>;
 
 export const createSubscriptionToEventBodySchema = z.object({
-  name: z.string(),
+  name: z.string().trim().min(1).max(256),
   email: z.string().email(),
   referrer: z.string().uuid().nullish()
 })
