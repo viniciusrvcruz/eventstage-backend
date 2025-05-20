@@ -5,11 +5,11 @@ import { subscriptionSchema } from "./event.subscription.schema";
 
 export const eventSchema = z.object({
   id: z.string(),
-  title: z.string(),
-  subtitle: z.string().min(2),
-  description: z.string().min(2),
+  title: z.string().trim().min(3),
+  subtitle: z.string().trim().min(2),
+  description: z.string().trim().min(2),
   date: z.coerce.date(),
-  url: z.string().url().max(2048),
+  url: z.string().trim().url().max(2048),
   is_live: z.boolean(),
   createdBy: z.string(),
   createdAt: z.coerce.date()
